@@ -28,9 +28,5 @@
         }
     ],
     "outputs": {
-        "storageURI": {
-            "type": "string",
-            "value": "[reference('storage').outputs.storageEndpoint.value]"
-        }
     }
 }
