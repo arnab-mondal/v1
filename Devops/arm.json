@@ -46,7 +46,6 @@
             "apiVersion": "2023-05-01",
             "name": "[concat(parameters('StorageAccountName'), '/default/dw-originals')]",
             "dependsOn": [
-                // "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('StorageAccountName'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
             ],
             "properties": {
