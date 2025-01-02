@@ -1,63 +1,62 @@
-// {
-//     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-//     "contentVersion": "1.0.0.0",
-//     "parameters": {
-//         "StorageAccountName": {
-//             "type": "String"
-//         },
-//     },
-//     "variables":{},
-//     "resources":[
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "StorageAccountName": {
+            "type": "String"
+        }
+    },
+    "variables":{},
+    "resources":[
 
-//         {
-//             "type": "Microsoft.Storage/storageAccounts",
-//             "apiVersion": "2019-04-01",
-//             "location": "[resourceGroup().location]",
-//             "name": "[parameters('StorageAccountName')]",
-//             "location": "[resourceGroup().location]",
-//             "sku": {
-//                 "name": "Standard_LRS",
-//                 "tier": "Standard"
-//             },
-//             "kind": "StorageV2",
-//             "properties": {
-//                 "networkAcls": {
-//                     "bypass": "AzureServices",
-//                     "virtualNetworkRules": [],
-//                     "ipRules": [],
-//                     "defaultAction": "Allow"
-//                 },
-//                 "supportsHttpsTrafficOnly": true,
-//                 "encryption": {
-//                     "services": {
-//                         "file": {
-//                             "enabled": true
-//                         },
-//                         "blob": {
-//                             "enabled": true
-//                         }
-//                     },
-//                     "keySource": "Microsoft.Storage"
-//                 },
-//                 "accessTier": "Cool"
-//             }
-//         },
-//         {
-//             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-//             "apiVersion": "2023-05-01",
-//             "name": "[concat(parameters('StorageAccountName'), '/default/dw-originals')]",
-//             "dependsOn": [
-//                 // "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('StorageAccountName'), 'default')]",
-//                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
-//             ],
-//             "properties": {
-//                 "immutableStorageWithVersioning": {
-//                     "enabled": false
-//                 },
-//                 "defaultEncryptionScope": "$account-encryption-key",
-//                 "denyEncryptionScopeOverride": false,
-//                 "publicAccess": "None"
-//             }
-//         }
-//     ]
-// }
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('StorageAccountName')]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Cool"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(parameters('StorageAccountName'), '/default/dw-originals')]",
+            "dependsOn": [
+                // "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('StorageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName'))]"
+            ],
+            "properties": {
+                "immutableStorageWithVersioning": {
+                    "enabled": false
+                },
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None"
+            }
+        }
+    ]
+}
