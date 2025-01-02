@@ -8,7 +8,7 @@
         }
     },
     "variables": {
-        "linked-template": "https://raw.githubusercontent.com/arnab-mondal/v1/refs/heads/master/Devops/lgaarm.json"
+        "linked-template": "https://raw.githubusercontent.com/arnab-mondal/v1/f7f2a30328fcb69236b15353a28e4712b8a7ec61/Devops/lgaarm.json"
     },
     "resources": [
         {
