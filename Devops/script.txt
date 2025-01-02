@@ -1,0 +1,4 @@
+New-AzResourceGroupDeployment -ResourceGroupName Kcc-aus-east-DEV -TemplateFile arm.json -TemplateParameterFile arm.parameters.json
+
+
+az deployment group create --resource-group Kcc-aus-east-DEV --template-file arm.json --parameters arm.parameters.json
