@@ -43,7 +43,7 @@
                                 },
                                 "Response": {
                                     "runAfter": {
-                                        "Update_Log_for_LGA3": [
+                                        "Compose": [
                                             "Succeeded"
                                         ]
                                     },
