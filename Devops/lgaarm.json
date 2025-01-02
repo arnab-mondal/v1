@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_la_stepxml_ack_dw_dev_name": {
+            "defaultValue": "lga-ack-",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[concat(parameters('workflows_la_stepxml_ack_dw_dev_name'), uniqueString(resourceGroup().id))]",
+            "location": "australiaeast",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "When_a_HTTP_request_is_received": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "method": "POST"
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Try_Scope": {
+                            "actions": {
+                                "Compose": {
+                                    "type": "Compose",
+                                    "inputs": "@triggerBody()['File']"
+                                },
+                                "Response": {
+                                    "runAfter": {
+                                        "Update_Log_for_LGA3": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Response",
+                                    "kind": "Http",
+                                    "inputs": {
+                                        "statusCode": 200,
+                                        "body": {
+                                            "Status": "Success"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {},
+                            "type": "Scope"
+                        },
+                        "Catch_Scope": {
+                            "actions": {
+                                "Get_LA_Error": {
+                                    "type": "Http",
+                                    "inputs": {
+                                        "uri": "https://prod-146.westeurope.logic.azure.com:443/workflows/23f77676976c463d83f578f5e14f0bd1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=wmj4XbYf4CuHEE9eaU8MMXUbpl0D1fY1PAUwzmYFt5U",
+                                        "method": "POST",
+                                        "body": {
+                                            "resourceGroup": "Kcc-aus-east-DEV",
+                                            "runId": "@{workflow()?['run']?['name']}",
+                                            "subscriptionId": "51625274-759a-4914-acac-347f84e9435c",
+                                            "workflowName": "@{workflow()?['name']}"
+                                        }
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Try_Scope": [
+                                    "TimedOut",
+                                    "Skipped",
+                                    "Failed"
+                                ]
+                            },
+                            "type": "Scope"
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                }
+            }
+        }
+    ]
+}
